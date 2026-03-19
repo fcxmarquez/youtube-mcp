@@ -1,6 +1,6 @@
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { McpAgent } from 'agents/mcp';
 import { z } from 'zod';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 export class YoutubeMCP extends McpAgent {
 	server = new McpServer({
@@ -17,7 +17,7 @@ export class YoutubeMCP extends McpAgent {
 			},
 			async ({ url }) => {
 				return {
-					content: [{ type: 'text', text: 'Youtube video URL' }],
+					content: [{ type: 'text', text: url }],
 				};
 			},
 		);

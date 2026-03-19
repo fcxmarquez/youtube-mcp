@@ -4,10 +4,15 @@
 	"private": true,
 	"packageManager": "bun@1.2.10",
 	"scripts": {
+		"check": "bun run format && bun run lint && bun run typecheck",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"format": "biome format --write .",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
 		"start": "wrangler dev",
 		"test": "vitest",
+		"typecheck": "tsc --noEmit",
 		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {
