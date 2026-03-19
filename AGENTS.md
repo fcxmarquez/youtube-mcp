@@ -32,3 +32,19 @@ https://developers.cloudflare.com/workers/runtime-apis/nodejs/
 
 Retrieve API references and limits from:
 `/kv/` · `/r2/` · `/d1/` · `/durable-objects/` · `/queues/` · `/vectorize/` · `/workers-ai/` · `/agents/`
+
+# youtube-mcp
+
+A YouTube MCP server that can be used to search for and retrieve information, transcripts, and other metadata about YouTube videos.
+
+## Development workflow
+
+Important commands to test the code:
+
+* `bun run dev` - local development
+* `bun run check` - check for code linting errors
+* `bun run lint` - list code linting errors
+* `bun run lint:fix` - fix code linting errors
+* `bun run format` - format code
+
+After developing the code, execute `bun check` to ensure the code is working correctly.
