@@ -1,18 +1,27 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { McpAgent } from 'agents/mcp';
+import { z } from 'zod';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
-	},
-} satisfies ExportedHandler<Env>;
+export class YoutubeMCP extends McpAgent {
+	server = new McpServer({
+		name: 'youtube-mcp',
+		version: '1.0.0',
+	});
+
+	async init() {
+		this.server.registerTool(
+			'tool_name',
+			{
+				description: 'what the tool does',
+				inputSchema: { url: z.string().url().describe('Youtube video URL') },
+			},
+			async ({ url }) => {
+				return {
+					content: [{ type: 'text', text: 'Youtube video URL' }],
+				};
+			},
+		);
+	}
+}
+
+export default YoutubeMCP.serve('/mcp') satisfies ExportedHandler<Env>;
