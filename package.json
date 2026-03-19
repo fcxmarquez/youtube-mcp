@@ -2,6 +2,7 @@
 	"name": "youtube-mcp",
 	"version": "0.0.0",
 	"private": true,
+	"packageManager": "bun@1.2.10",
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
@@ -10,10 +11,16 @@
 		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "2.4.8",
 		"@cloudflare/vitest-pool-workers": "^0.12.4",
 		"@types/node": "^25.5.0",
 		"typescript": "^5.5.2",
 		"vitest": "~3.2.0",
 		"wrangler": "^4.75.0"
+	},
+	"dependencies": {
+		"@cloudflare/workers-types": "^4.20260317.1",
+		"agents": "^0.7.9",
+		"zod": "^4.3.6"
 	}
 }
