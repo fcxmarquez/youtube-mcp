@@ -13,7 +13,7 @@ export class YoutubeMCP extends McpAgent {
 			'tool_name',
 			{
 				description: 'what the tool does',
-				inputSchema: { url: z.string().url().describe('Youtube video URL') },
+				inputSchema: { url: z.url().describe('Youtube video URL') },
 			},
 			async ({ url }) => {
 				return {
