@@ -13,7 +13,11 @@ function decodeHtmlEntities(text: string): string {
 
 export function parseTranscriptXml(xml: string): TranscriptSnippet[] {
 	const textRegex = /<text\s+start="([^"]*)"(?:\s+dur="([^"]*)")?[^>]*>([\s\S]*?)<\/text>/g;
-	const matches = xml.matchAll(textRegex);
+	const matches = [...xml.matchAll(textRegex)];
+
+	if (xml.length > 0 && matches.length === 0) {
+		throw new Error('Invalid XML');
+	}
 
 	const snippets: TranscriptSnippet[] = [];
 	for (const match of matches) {
