@@ -24,7 +24,7 @@ export async function fetchVideoPage(videoId: string): Promise<{ html: string; c
 	});
 
 	if (!response.ok) {
-		throw new Error(`Failed to fetch video page: ${response.status}`);
+		throw new Error(`Failed to fetch video page: ${response.statusText} ${response.status}`);
 	}
 
 	const allCookies = collectCookies(response, cookies);
