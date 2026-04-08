@@ -1,24 +1,26 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { createMcpHandler } from "agents/mcp";
-import { z } from "zod";
-import { extractVideoId, getTranscript } from "./transcript";
+import OAuthProvider from '@cloudflare/workers-oauth-provider';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { createMcpHandler } from 'agents/mcp';
+import { z } from 'zod';
+import { AuthHandler } from './auth';
+import { extractVideoId, getTranscript } from './transcript';
 
 function createServer() {
 	const server = new McpServer({
-		name: "youtube-mcp",
-		version: "1.0.0",
+		name: 'youtube-mcp',
+		version: '1.0.0',
 	});
 
 	server.registerTool(
-		"get_transcript",
+		'get_transcript',
 		{
-			description: "Get the transcript of a YouTube video",
-			inputSchema: { url: z.url().describe("Youtube video URL") },
+			description: 'Get the transcript of a YouTube video',
+			inputSchema: { url: z.url().describe('Youtube video URL') },
 		},
 		async ({ url }) => {
 			const transcript = await getTranscript(extractVideoId(url));
 			const content = transcript.map((snippet) => ({
-				type: "text" as const,
+				type: 'text' as const,
 				text: snippet.text,
 			}));
 
@@ -31,9 +33,17 @@ function createServer() {
 	return server;
 }
 
-export default {
-	fetch: async (request: Request, env: Env, ctx: ExecutionContext) => {
-		const server = createServer();
-		return createMcpHandler(server)(request, env, ctx);
+const apiHandler = {
+	async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+		return createMcpHandler(createServer())(request, env, ctx);
 	},
-} satisfies ExportedHandler<Env>;
+};
+
+export default new OAuthProvider({
+	apiRoute: '/mcp',
+	apiHandler,
+	defaultHandler: AuthHandler,
+	authorizeEndpoint: '/authorize',
+	tokenEndpoint: '/oauth/token',
+	clientRegistrationEndpoint: '/oauth/register',
+});
